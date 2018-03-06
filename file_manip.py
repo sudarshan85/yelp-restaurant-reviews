@@ -5,8 +5,6 @@ import codecs
 import json
 import time
 
-from tqdm import *
-
 from helpers import lemmatized_sentence_corpus
 
 def get_restaurant_ids(businesses_filepath):
@@ -55,10 +53,9 @@ def write_review_file(review_txt_filepath, review_json_filepath, restaurant_ids)
     return review_count
 
 def write_unigram_sents(unigram_sentences_filepath, review_txt_filepath, spacy_model):
-    n_lines = 3221419
     sentence_count = 0
     with codecs.open(unigram_sentences_filepath, 'w', encoding='utf_8') as f:
-        for sentence in tqdm(lemmatized_sentence_corpus(review_txt_filepath, spacy_model), total=n_lines):
+        for sentence in lemmatized_sentence_corpus(review_txt_filepath, spacy_model):
             f.write(sentence + '\n')
             sentence_count += 1
             

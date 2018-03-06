@@ -26,7 +26,7 @@ def lemmatized_sentence_corpus(filename, spacy_model):
     lemmatize the text, and yield sentences
     """
     
-    for parsed_review in spacy_model.pipe(line_review(filename), batch_size=10, n_threads=-1):        
+    for parsed_review in spacy_model.pipe(line_review(filename), batch_size=10000, n_threads=8):        
         for sent in parsed_review.sents:
             yield u' '.join([token.lemma_ for token in sent if not punct_space(token)])
             
