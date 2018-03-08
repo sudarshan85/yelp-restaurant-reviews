@@ -61,7 +61,7 @@ def write_unigram_sents(unigram_sentences_filepath, review_txt_filepath, spacy_m
             
     return sentence_count
 
-def write_sents(sentences_filepath, sentences, phrase_model=None):
+def write_sents(sentences_filepath, sentences, model):
     sentence_count = 0
     with codecs.open(sentences_filepath, 'w', encoding='utf_8') as f:
         for sentence in sentences:
