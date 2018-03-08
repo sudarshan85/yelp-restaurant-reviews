@@ -5,7 +5,9 @@ import codecs
 import json
 import time
 
-from helpers import lemmatized_sentence_corpus
+from spacy.lang.en.stop_words import STOP_WORDS
+
+from helpers import lemmatized_sentence_corpus, line_review
 
 def get_restaurant_ids(businesses_filepath):
     restaurant_ids = set()
@@ -70,3 +72,25 @@ def write_sents(sentences_filepath, sentences, model):
             sentence_count += 1
 
     return sentence_count
+
+def write_trigram_review(trigram_reviews_filepath, review_txt_filepath, bigram_model, trigram_model, spacy_model):
+    review_count = 0
+    
+    for parsed_review in spacy_model.pipe(line_review(review_txt_filepath), batch_size=10000, n_threads=8):
+        
+        # lemmatize the text, removing punctuation and whitespace
+        unigram_review = [token.lemma_ for token in parsed_review if not punct_space(token)]
+
+        # apply the first-order and second-order phrase models
+        bigram_review = bigram_model[unigram_review]
+        trigram_review = trigram_model[bigram_review]
+
+        # remove any remaining stopwords
+        trigram_review = [term for term in trigram_review if term not in STOP_WORDS]
+
+        # write the transformed review as a line in the new file
+        trigram_review = u' '.join(trigram_review)
+        f.write(trigram_review + '\n')
+        review_count += 1    
+    
+    return review_count        
