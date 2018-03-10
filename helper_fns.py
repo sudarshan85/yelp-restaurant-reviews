@@ -5,6 +5,8 @@ import codecs
 import json
 import time
 
+from gensim.models.word2vec import LineSentence
+
 from spacy.lang.en.stop_words import STOP_WORDS
 
 def punct_space(token):
@@ -36,6 +38,16 @@ def lemmatized_sentence_corpus(filename, spacy_model):
     for parsed_review in spacy_model.pipe(line_review(filename), batch_size=10000, n_threads=8):        
         for sent in parsed_review.sents:
             yield u' '.join([token.lemma_ for token in sent if not punct_space(token)])
+            
+
+def trigram_bow_generator(filepath, dictionary):
+    """
+    generator function to read reviews from a file
+    and yield a bag-of-words representation
+    """
+    
+    for review in LineSentence(filepath):
+        yield dictionary.doc2bow(review)            
 
             
 def full_df(df):
