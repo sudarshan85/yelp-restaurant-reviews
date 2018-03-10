@@ -49,6 +49,20 @@ def trigram_bow_generator(filepath, dictionary):
     for review in LineSentence(filepath):
         yield dictionary.doc2bow(review)            
 
+        
+def explore_topic(lda_model, topic_number, topn=25):
+    """
+    accept a user-supplied topic number and
+    print out a formatted list of the top terms
+    """
+    
+    print(u'topic number: {}'.format(topic_number) + u'\n')
+    print(u'{:20} {}'.format(u'term', u'frequency') + u'\n')
+
+    for term, frequency in lda_model.show_topic(topic_number, topn=25):
+        print(u'{:20} {:.3f}'.format(term, round(frequency, 3)))
+        
+        
             
 def full_df(df):
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):
