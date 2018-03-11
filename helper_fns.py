@@ -62,8 +62,7 @@ def explore_topic(lda_model, topic_number, topn=25):
     for term, frequency in lda_model.show_topic(topic_number, topn=25):
         print(u'{:20} {:.3f}'.format(term, round(frequency, 3)))
         
-        
-            
+
 def full_df(df):
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):
         print(df)  
